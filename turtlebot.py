@@ -1,58 +1,86 @@
-import RPi.GPIO as GPIO
+from __future__ import division
+from RPi import GPIO
 from time import sleep
-import turtle
 
 GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
 
-RIGHT_FORWARD = 17
-RIGHT_BACKWARD = 18
-LEFT_FORWARD = 22
-LEFT_BACKWARD = 23
+class TurtleBot(object):
+    def __init__(right_forward, right_backward,
+            left_forward, left_backward, speed):
+        self.right_forward = right_forward
+        self.right_backward = right_backward
+        self.left_forward = left_forward
+        self.left_backward = left_backward
+        self.speed = speed
+        self._setup_gpio()
 
-GPIO.setup(RIGHT_FORWARD, GPIO.OUT)
-GPIO.setup(RIGHT_BACKWARD, GPIO.OUT)
+    def _setup_gpio(self):
+        """
+        Setup motor pins as GPIO outputs
+        """
 
-GPIO.setup(LEFT_FORWARD, GPIO.OUT)
-GPIO.setup(LEFT_BACKWARD, GPIO.OUT)
+        GPIO.setup(self.right_forward, GPIO.OUT)
+        GPIO.setup(self.right_backward, GPIO.OUT)
+        GPIO.setup(self.left_forward, GPIO.OUT)
+        GPIO.setup(self.left_backward, GPIO.OUT)
 
+    def _motor_on(motor):
+        """
+        Turn a given motor on
+        """
 
-def motor_on(motor):
-    GPIO.output(motor, 1)
+        GPIO.output(motor, True)
 
+    def _motor_off(motor):
+        """
+        Turn a given motor off
+        """
 
-def motor_off(motor):
-    GPIO.output(motor, 0)
+        GPIO.output(motor, False)
 
+    def forward(seconds):
+        """
+        Move the robot forwards for a given number of seconds
+        """
 
-def forward(seconds):
-    turtle.forward(seconds * 100)
-    motor_on(LEFT_FORWARD)
-    motor_on(RIGHT_FORWARD)
-    sleep(seconds)
-    motor_off(LEFT_FORWARD)
-    motor_off(RIGHT_FORWARD)
+        _motor_on(self.left_forward)
+        _motor_on(self.right_forward)
+        sleep(seconds)
+        _motor_off(self.left_forward)
+        _motor_off(self.right_forward)
 
+    def backward(seconds):
+        """
+        Move the robot backwards for a given number of seconds
+        """
 
-def backward(seconds):
-    turtle.backward(seconds * 100)
-    motor_on(LEFT_BACKWARD)
-    motor_on(RIGHT_BACKWARD)
-    sleep(seconds)
-    motor_off(LEFT_BACKWARD)
-    motor_off(RIGHT_BACKWARD)
+        _motor_on(self.left_backward)
+        _motor_on(self.right_backward)
+        sleep(seconds)
+        _motor_off(self.left_backward)
+        _motor_off(self.right_backward)
 
+    def left(angle):
+        """
+        Turn the robot left a given number of degrees (based on a number of
+        seconds calculated by the object's speed property)
+        """
 
-def left(angle):
-    motor_on(RIGHT_FORWARD)
-    motor_on(LEFT_BACKWARD)
-    sleep(angle / 90)
-    motor_off(RIGHT_FORWARD)
-    motor_off(LEFT_BACKWARD)
+        _motor_on(self.right_forward)
+        _motor_on(self.left_backward)
+        sleep(angle / self.speed)
+        _motor_off(self.right_forward)
+        _motor_off(self.left_backward)
 
+    def right(angle):
+        """
+        Turn the robot right a given number of degrees (based on a number of
+        seconds calculated by the object's speed property)
+        """
 
-def right(angle):
-    motor_on(LEFT_FORWARD)
-    motor_on(RIGHT_BACKWARD)
-    sleep(angle / 90)
-    motor_off(LEFT_FORWARD)
-    motor_off(RIGHT_BACKWARD)
+        _motor_on(self.left_forward)
+        _motor_on(self.right_backward)
+        sleep(angle / self.speed)
+        _motor_off(self.left_forward)
+        _motor_off(self.right_backward)
