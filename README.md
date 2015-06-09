@@ -1,6 +1,6 @@
 # turtlebot
 
-An extension of the Python `turtle` module for use with Raspberry Pi robots driven by motor boards such as [Ryanteck RTK](https://www.ryanteck.ltd.uk/store/index.php?id_product=8&controller=product)
+Drive your Raspberry Pi robot like you're using the Python Turtle module
 
 ## Usage
 
