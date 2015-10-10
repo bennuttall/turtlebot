@@ -1,3 +1,5 @@
+**This project has been superceded by [GPIO Zero](https://github.com/RPi-Distro/python-gpiozero)**
+
 # turtlebot
 
 Drive your Raspberry Pi robot like you're using the Python Turtle module
